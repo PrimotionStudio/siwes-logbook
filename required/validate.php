@@ -7,13 +7,53 @@ if (isset($_SESSION["loginkey"]) && isset($_SESSION["user_id"])) {
 	$query_user = mysqli_query($con, $select_user);
 	if (mysqli_num_rows($query_user) != 0) {
 		// Login Validated
+		$get_user = mysqli_fetch_assoc($query_user);
+		switch ($get_user["role"]) {
+			case 'admin':
+				// Admin
+				break;
+			case 'lecturer':
+				// Lecturer
+				$select_lecturer = "SELECT * FROM lecturer WHERE user_id='$user_id'";
+				$query_lecturer = mysqli_query($con, $select_lecturer);
+				if (mysqli_num_rows($query_lecturer) == 0) {
+					$_SESSION["alert"] = "Your information are not complete.";
+					header("location: lecturers");
+					exit;
+				}
+				break;
+			case 'supervisor':
+				// Supervisor
+				$select_supervisor = "SELECT * FROM supervisor WHERE user_id='$user_id'";
+				$query_supervisor = mysqli_query($con, $select_supervisor);
+				if (mysqli_num_rows($query_supervisor) == 0) {
+					$_SESSION["alert"] = "Your information are not complete.";
+					header("location: supervisors");
+					exit;
+				}
+				break;
+			case 'student':
+				// Student
+				$select_student = "SELECT * FROM students WHERE user_id='$user_id'";
+				$query_student = mysqli_query($con, $select_student);
+				if (mysqli_num_rows($query_student) == 0) {
+					$_SESSION["alert"] = "Your information are not complete.";
+					header("location: students");
+					exit;
+				}
+				break;
+			default:
+				$_SESSION["alert"] = "You account has not been approved, please contact the admin for approval";
+				header("location: not-approved");
+				exit;
+		}
 	} else {
 		$_SESSION["alert"] = "Session expired, please login again";
-		header("location: login");
+		header("location: logout");
 		exit;
 	}
 } else {
 	$_SESSION["alert"] = "Session expired, please login again";
-	header("location: login");
+	header("location: logout");
 	exit;
 }

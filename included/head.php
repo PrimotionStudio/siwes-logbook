@@ -18,4 +18,4 @@
 	<link href="assets/demo/demo.css" rel="stylesheet" />
 </head>
 
-<body class="demo-icons">
+<body class="">

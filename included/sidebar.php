@@ -7,7 +7,7 @@
 			<!-- <p>CT</p> -->
 		</a>
 		<a href="javascript:;" class="simple-text logo-normal">
-			DRMS
+			SIWES Logbook
 			<!-- <div class="logo-image-big">
             <img src="assets/img/logo-big.png">
           </div> -->
@@ -15,30 +15,36 @@
 	</div>
 	<div class="sidebar-wrapper">
 		<ul class="nav">
-			<li>
-				<a href="index">
-					<i class="nc-icon nc-bank"></i>
-					<p>Dashboard</p>
-				</a>
-			</li>
-			<li>
-				<a href="disaster-entry">
-					<i class="nc-icon nc-sound-wave"></i>
-					<p>Disaster Entry</p>
-				</a>
-			</li>
-			<li>
-				<a href="disasters">
-					<i class="nc-icon nc-single-copy-04"></i>
-					<p>Disasters</p>
-				</a>
-			</li>
-			<li>
-				<a href="analysis">
-					<i class="nc-icon nc-chart-bar-32"></i>
-					<p>Analysis</p>
-				</a>
-			</li>
+			<?php
+			if ($get_user["role"] !== null) :
+			?>
+				<li>
+					<a href="home">
+						<i class="nc-icon nc-bank"></i>
+						<p>Dashboard</p>
+					</a>
+				</li>
+				<li>
+					<a href="log-entry">
+						<i class="nc-icon nc-paper"></i>
+						<p>Log Entry</p>
+					</a>
+				</li>
+				<li>
+					<a href="disasters">
+						<i class="nc-icon nc-single-copy-04"></i>
+						<p>Disasters</p>
+					</a>
+				</li>
+				<li>
+					<a href="analysis">
+						<i class="nc-icon nc-chart-bar-32"></i>
+						<p>Analysis</p>
+					</a>
+				</li>
+			<?php
+			endif;
+			?>
 			<li class="active-pro">
 				<a href="logout">
 					<i class="nc-icon text-danger nc-button-power"></i>

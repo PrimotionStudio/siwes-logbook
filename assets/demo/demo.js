@@ -392,7 +392,7 @@ demo = {
     color = colour || 'primary';
 
     $.notify({
-      icon: "nc-icon nc-bell-55",
+      icon: "nc-icon nc-alert-circle-i",
       message: msg || "Hello There."
 
     }, {

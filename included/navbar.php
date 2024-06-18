@@ -19,7 +19,7 @@
 		<div class="collapse navbar-collapse justify-content-end" id="navigation">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link btn-rotate text-danger" href="javascript:;">
+					<a class="nav-link btn-rotate text-danger" href="logout">
 						<i class="nc-icon nc-button-power text-danger"></i>
 						<p>
 							<span class="d-lg-none d-md-block text-danger">Logout</span>
