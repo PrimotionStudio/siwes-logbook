@@ -14,7 +14,7 @@ if (isset($_SESSION["loginkey"]) && isset($_SESSION["user_id"])) {
 				break;
 			case 'lecturer':
 				// Lecturer
-				$select_lecturer = "SELECT * FROM lecturer WHERE user_id='$user_id'";
+				$select_lecturer = "SELECT * FROM lecturers WHERE user_id='$user_id'";
 				$query_lecturer = mysqli_query($con, $select_lecturer);
 				if (mysqli_num_rows($query_lecturer) == 0) {
 					$_SESSION["alert"] = "Your information are not complete.";
@@ -24,7 +24,7 @@ if (isset($_SESSION["loginkey"]) && isset($_SESSION["user_id"])) {
 				break;
 			case 'supervisor':
 				// Supervisor
-				$select_supervisor = "SELECT * FROM supervisor WHERE user_id='$user_id'";
+				$select_supervisor = "SELECT * FROM supervisors WHERE user_id='$user_id'";
 				$query_supervisor = mysqli_query($con, $select_supervisor);
 				if (mysqli_num_rows($query_supervisor) == 0) {
 					$_SESSION["alert"] = "Your information are not complete.";

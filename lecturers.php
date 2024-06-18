@@ -19,7 +19,7 @@ if (isset($_SESSION["loginkey"]) && isset($_SESSION["user_id"])) {
 			header("location: home");
 			exit;
 		}
-		if ($get_user["role"] !== 'student') {
+		if ($get_user["role"] !== 'lecturer') {
 			// Get redirected to appropriate page
 			$_SESSION["alert"] = "Your information is not complete.";
 			header("location: home");
@@ -36,9 +36,9 @@ if (isset($_SESSION["loginkey"]) && isset($_SESSION["user_id"])) {
 	exit;
 }
 
-const PAGE_TITLE = "Students Information - Digital Logbook System";
+const PAGE_TITLE = "Lecturers Information - Digital Logbook System";
 include_once "included/head.php";
-require_once "func/students.php";
+require_once "func/lecturers.php";
 ?>
 <div class="wrapper ">
 	<?php
@@ -54,7 +54,7 @@ require_once "func/students.php";
 				<div class="col-md-8">
 					<div class="card card-user">
 						<div class="card-header">
-							<h5 class="card-title">Update Students Information</h5>
+							<h5 class="card-title">Update Lecturers Information</h5>
 						</div>
 						<div class="card-body">
 							<form action="" method="post">
@@ -74,21 +74,13 @@ require_once "func/students.php";
 									</div>
 								</div>
 								<div class="row">
-									<div class="col-md-4">
+									<div class="col-md-6">
 										<div class="form-group">
 											<label>Email address</label>
 											<input type="email" name="email" class="form-control" placeholder="Email" value="<?= $get_user["email"] ?>" readonly>
 										</div>
 									</div>
-									<?php
-									?>
-									<div class="col-md-4">
-										<div class="form-group">
-											<label>Matric Number</label>
-											<input type="text" class="form-control" name="matric" placeholder="DE:xxxx/****" required>
-										</div>
-									</div>
-									<div class="col-md-4">
+									<div class="col-md-6">
 										<div class="form-group">
 											<label>Phone Number</label>
 											<input type="tel" class="form-control" name="phone" placeholder="Phone Number" value="<?= $get_user["phone"] ?>" readonly>
@@ -106,25 +98,6 @@ require_once "func/students.php";
 										<div class="form-group">
 											<label>Department</label>
 											<input type="text" class="form-control" name="department" placeholder="Department" required>
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-12">
-										<div class="form-group">
-											<label>Company</label>
-											<select name="company" class="form-control" required>
-												<option value="">--Select a company you want to intern at--</option>
-												<?php
-												$select_company = "SELECT * FROM company ORDER BY name ASC";
-												$query_company = mysqli_query($con, $select_company);
-												while ($get_company = mysqli_fetch_assoc($query_company)) :
-												?>
-													<option value="<?= $get_company["id"] ?>"><?= $get_company["name"] ?></option>
-												<?php
-												endwhile;
-												?>
-											</select>
 										</div>
 									</div>
 								</div>
