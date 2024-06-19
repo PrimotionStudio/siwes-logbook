@@ -31,9 +31,9 @@
 					</a>
 				</li>
 				<li>
-					<a href="disasters">
+					<a href="logs">
 						<i class="nc-icon nc-single-copy-04"></i>
-						<p>Disasters</p>
+						<p>Logs</p>
 					</a>
 				</li>
 				<li>
