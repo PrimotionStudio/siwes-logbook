@@ -26,6 +26,9 @@ if (mysqli_num_rows($query_company) == 0) {
 }
 $get_company = mysqli_fetch_assoc($query_company);
 
+// Get Logs
+$select_log = "SELECT * FROM logs WHERE user_id='$user_id' && company_id='$company_id'";
+$query_log = mysqli_query($con, $select_log);
 require_once "func/log-entry.php";
 ?>
 <div class="wrapper ">
@@ -58,33 +61,21 @@ require_once "func/log-entry.php";
                     </th>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td>Lorem</td>
-                      <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, magnam ipsa impedit quod, repellat ad saepe tempore delectus voluptatem enim nihil itaque distinctio temporibus illo odio nisi perspiciatis, unde recusandae provident aspernatur ea. Beatae corrupti tempore veritatis error iste? Sit odio facilis eveniet eum omnis maiores velit voluptates tempora quidem!</td>
-                      <td class="text-right">
-                        <a href="" title="more">
-                          <i class="nc-icon nc-minimal-right"></i>
-                        </a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Lorem</td>
-                      <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, magnam ipsa impedit quod, repellat ad saepe tempore delectus voluptatem enim nihil itaque distinctio temporibus illo odio nisi perspiciatis, unde recusandae provident aspernatur ea. Beatae corrupti tempore veritatis error iste? Sit odio facilis eveniet eum omnis maiores velit voluptates tempora quidem!</td>
-                      <td class="text-right">
-                        <a href="" title="more">
-                          <i class="nc-icon nc-minimal-right"></i>
-                        </a>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Lorem</td>
-                      <td>Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, magnam ipsa impedit quod, repellat ad saepe tempore delectus voluptatem enim nihil itaque distinctio temporibus illo odio nisi perspiciatis, unde recusandae provident aspernatur ea. Beatae corrupti tempore veritatis error iste? Sit odio facilis eveniet eum omnis maiores velit voluptates tempora quidem!</td>
-                      <td class="text-right">
-                        <a href="" title="more">
-                          <i class="nc-icon nc-minimal-right"></i>
-                        </a>
-                      </td>
-                    </tr>
+                    <?php
+                    while ($get_log = mysqli_fetch_assoc($query_log)) :
+                    ?>
+                      <tr>
+                        <td><?= date("d/m/Y", strtotime($get_log["datetime"])) ?></td>
+                        <td><?= $get_log["activity"] ?></td>
+                        <td class="text-right">
+                          <a href="edit-log?id=<?= $get_log["id"] ?>" title="more">
+                            <i class="nc-icon nc-minimal-right"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    <?php
+                    endwhile;
+                    ?>
                   </tbody>
                 </table>
               </div>
