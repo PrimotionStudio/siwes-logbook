@@ -24,18 +24,36 @@
 						<p>Dashboard</p>
 					</a>
 				</li>
-				<li>
-					<a href="log-entry">
-						<i class="nc-icon nc-paper"></i>
-						<p>Log Entry</p>
-					</a>
-				</li>
-				<li>
-					<a href="logs">
-						<i class="nc-icon nc-single-copy-04"></i>
-						<p>Logs</p>
-					</a>
-				</li>
+				<?php
+				if ($get_user["role"] === 'student') :
+				?>
+					<li>
+						<a href="log-entry">
+							<i class="nc-icon nc-paper"></i>
+							<p>Log Entry</p>
+						</a>
+					</li>
+					<li>
+						<a href="logs">
+							<i class="nc-icon nc-single-copy-04"></i>
+							<p>Logs</p>
+						</a>
+					</li>
+				<?php
+				endif;
+				?>
+				<?php
+				if ($get_user["role"] === 'supervisor') :
+				?>
+					<li>
+						<a href="students-logs">
+							<i class="nc-icon nc-single-02"></i>
+							<p>Students</p>
+						</a>
+					</li>
+				<?php
+				endif;
+				?>
 				<li>
 					<a href="analysis">
 						<i class="nc-icon nc-chart-bar-32"></i>

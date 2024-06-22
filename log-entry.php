@@ -29,15 +29,18 @@ $get_company = mysqli_fetch_assoc($query_company);
 // If logs has been entered for today, refuse access else allow
 $select_log = "SELECT * FROM logs WHERE user_id='$user_id' && company_id='$company_id' ORDER BY datetime DESC LIMIT 1";
 $query_log = mysqli_query($con, $select_log);
-$get_log = mysqli_fetch_assoc($query_log);
-$date_array = explode(" ", $get_log["datetime"]);
-$date = $date_array[0];
-$php_date = date("Y-m-d");
-if ($date === $php_date) {
-  // Todays activity has already been logged redirect to logs
-  $_SESSION["alert"] = "Your activity for today has already been logged";
-  header("location: logs"); // Todo: Change the route to logs
-  exit;
+if (mysqli_num_rows($query_log) == 0) {
+} else {
+  $get_log = mysqli_fetch_assoc($query_log);
+  $date_array = explode(" ", $get_log["datetime"]);
+  $date = $date_array[0];
+  $php_date = date("Y-m-d");
+  if ($date === $php_date) {
+    // Todays activity has already been logged redirect to logs
+    $_SESSION["alert"] = "Your activity for today has already been logged";
+    header("location: logs"); // Todo: Change the route to logs
+    exit;
+  }
 }
 require_once "func/log-entry.php";
 ?>
@@ -65,7 +68,7 @@ require_once "func/log-entry.php";
                   <div class="col-md-12">
                     <div class="form-group">
                       <label>Date</label>
-                      <input type="date" class="form-control" id="datetime" readonly>
+                      <input type="text" class="form-control" value="<?= date("l d, M Y") ?>" readonly>
                     </div>
                   </div>
                 </div>
@@ -79,7 +82,7 @@ require_once "func/log-entry.php";
                 </div>
                 <div class="row">
                   <div class="ml-auto mr-auto">
-                    <button type="submit" class="btn btn-primary btn-round">Report</button>
+                    <button type="submit" class="btn btn-primary btn-round">Log</button>
                   </div>
                 </div>
               </form>

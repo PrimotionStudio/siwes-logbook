@@ -18,7 +18,7 @@ include_once "included/head.php";
 				<div class="col-md-8">
 					<div class="card card-user">
 						<div class="card-header">
-							<h5 class="card-title">Edit Profile</h5>
+							<h5 class="card-title">Your Details</h5>
 						</div>
 						<div class="card-body">
 							<form action="" method="post">
