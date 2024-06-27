@@ -24,9 +24,9 @@ if (isset($_SESSION["loginkey"]) && isset($_SESSION["user_id"])) {
 				break;
 			case 'supervisor':
 				// Supervisor
-				$select_supervisor = "SELECT * FROM supervisors WHERE user_id='$user_id'";
-				$query_supervisor = mysqli_query($con, $select_supervisor);
-				if (mysqli_num_rows($query_supervisor) == 0) {
+				$select_lecturer = "SELECT * FROM supervisors WHERE user_id='$user_id'";
+				$query_lecturer = mysqli_query($con, $select_lecturer);
+				if (mysqli_num_rows($query_lecturer) == 0) {
 					$_SESSION["alert"] = "Your information are not complete.";
 					header("location: supervisors");
 					exit;

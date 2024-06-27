@@ -2,11 +2,11 @@
 require_once "required/session.php";
 require_once "required/sql.php";
 require_once "required/validate.php";
-require_once "access/supervisor_only.php";
+require_once "access/lecturer_only.php";
 const PAGE_TITLE = "Students Logs - Digital Logbook System";
 include_once "included/head.php";
-// Get Supervisor Info
-$select_lecturer = "SELECT * FROM supervisors WHERE user_id='$user_id'";
+// Get Lecturer Info
+$select_lecturer = "SELECT * FROM lecturers WHERE user_id='$user_id'";
 $query_lecturer = mysqli_query($con, $select_lecturer);
 if (mysqli_num_rows($query_lecturer) == 0) {
   $_SESSION["alert"] = "Your information is not complete";
@@ -15,19 +15,11 @@ if (mysqli_num_rows($query_lecturer) == 0) {
   exit;
 }
 $get_lecturer = mysqli_fetch_assoc($query_lecturer);
-$company_id = $get_lecturer["company_id"];
-// Get Company Info
-$select_company = "SELECT * FROM company WHERE id='$company_id'";
-$query_company = mysqli_query($con, $select_company);
-if (mysqli_num_rows($query_company) == 0) {
-  $_SESSION["alert"] = "Cannot find attached company";
-  header("location: home"); // TODO: Debug Potential bug: if the company has been deleted or doesnt exist, then take use back to home won't solve anything
-  exit;
-}
-$get_company = mysqli_fetch_assoc($query_company);
+$department = $get_lecturer["department"];
+$faculty = $get_lecturer["faculty"];
 
-// Get Students in the same Company as the supervisor
-$select_student = "SELECT * FROM students WHERE company_id='$company_id'";
+// Get Students in the same Department and Faculty as the lecturer
+$select_student = "SELECT * FROM students WHERE faculty='$faculty' && department='$department'";
 $query_student = mysqli_query($con, $select_student);
 require_once "func/feedback.php";
 ?>
@@ -44,7 +36,7 @@ require_once "func/feedback.php";
         <div class="col-md-12">
           <div class="card">
             <div class="card-header">
-              <h4 class="card-title">Students at <?= $get_company["name"] ?></h4>
+              <h4 class="card-title">Students at <?= $department . ", Faculty of " . $faculty ?></h4>
             </div>
             <div class="card-body">
               <div class="">
@@ -68,28 +60,28 @@ require_once "func/feedback.php";
                   </thead>
                   <tbody>
                     <?php
-                    while ($get_student = mysqli_fetch_assoc($query_student)) :
+                    while ($get_student = mysqli_fetch_assoc($query_student)):
                       $select_student_user = "SELECT * FROM users WHERE id='" . $get_student["user_id"] . "'";
                       $query_student_user = mysqli_query($con, $select_student_user);
                       if (mysqli_num_rows($query_student_user) == 0) {
                         continue;
                       }
                       $get_student_user = mysqli_fetch_assoc($query_student_user);
-                    ?>
-                      <tr>
-                        <td>
-                          <?= $get_student_user["firstname"] . " " . $get_student_user["lastname"] ?>
-                        </td>
-                        <td><?= $get_student_user["email"] ?></td>
-                        <td><?= $get_student["faculty"] ?></td>
-                        <td><?= $get_student["department"] ?></td>
-                        <td class="text-right">
-                          <a href="student-logs?id=<?= $get_student_user["id"] ?>" title="more">
-                            <i class="nc-icon nc-minimal-right"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    <?php
+                      ?>
+                            <tr>
+                              <td>
+                                <?= $get_student_user["firstname"] . " " . $get_student_user["lastname"] ?>
+                              </td>
+                              <td><?= $get_student_user["email"] ?></td>
+                              <td><?= $get_student["faculty"] ?></td>
+                              <td><?= $get_student["department"] ?></td>
+                              <td class="text-right">
+                                <a href="student-logs?id=<?= $get_student_user["id"] ?>" title="more">
+                                  <i class="nc-icon nc-minimal-right"></i>
+                                </a>
+                              </td>
+                            </tr>
+                          <?php
                     endwhile;
                     ?>
                   </tbody>

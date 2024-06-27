@@ -31,8 +31,8 @@ $query_log = mysqli_query($con, $select_log);
 // It has no side-effects
 
 // $query_supervisor is gotten from the validate.php script
-$get_supervisor = mysqli_fetch_assoc($query_supervisor);
-$company_id = $get_supervisor["company_id"];
+$get_lecturer = mysqli_fetch_assoc($query_lecturer);
+$company_id = $get_lecturer["company_id"];
 
 // Get Company Info
 $select_company = "SELECT * FROM company WHERE id='$company_id'";

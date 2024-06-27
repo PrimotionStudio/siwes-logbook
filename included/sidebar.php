@@ -9,8 +9,8 @@
 		<a href="javascript:;" class="simple-text logo-normal">
 			SIWES Logbook
 			<!-- <div class="logo-image-big">
-            <img src="assets/img/logo-big.png">
-          </div> -->
+			<img src="assets/img/logo-big.png">
+		  </div> -->
 		</a>
 	</div>
 	<div class="sidebar-wrapper">
@@ -18,7 +18,14 @@
 			<?php
 			if ($get_user["role"] !== null) :
 			?>
-				<li>
+				<li class="<?php
+							$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
+							$file_name = end($file_path);
+							$route = explode(".", $file_name)[0];
+							if ($route === 'home') {
+								echo 'active';
+							}
+							?>">
 					<a href="home">
 						<i class="nc-icon nc-bank"></i>
 						<p>Dashboard</p>
@@ -27,13 +34,27 @@
 				<?php
 				if ($get_user["role"] === 'student') :
 				?>
-					<li>
+					<li class="<?php
+								$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
+								$file_name = end($file_path);
+								$route = explode(".", $file_name)[0];
+								if ($route === 'log-entry') {
+									echo 'active';
+								}
+								?>">
 						<a href="log-entry">
 							<i class="nc-icon nc-paper"></i>
 							<p>Log Entry</p>
 						</a>
 					</li>
-					<li>
+					<li class="<?php
+								$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
+								$file_name = end($file_path);
+								$route = explode(".", $file_name)[0];
+								if ($route === 'logs') {
+									echo 'active';
+								}
+								?>">
 						<a href="logs">
 							<i class="nc-icon nc-single-copy-04"></i>
 							<p>Logs</p>
@@ -45,7 +66,14 @@
 				<?php
 				if ($get_user["role"] === 'supervisor') :
 				?>
-					<li>
+					<li class="<?php
+								$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
+								$file_name = end($file_path);
+								$route = explode(".", $file_name)[0];
+								if ($route === 'students-logs') {
+									echo 'active';
+								}
+								?>">
 						<a href="students-logs">
 							<i class="nc-icon nc-single-02"></i>
 							<p>Students</p>
@@ -54,7 +82,33 @@
 				<?php
 				endif;
 				?>
-				<li>
+				<?php
+				if ($get_user["role"] === 'lecturer') :
+				?>
+					<li class="<?php
+								$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
+								$file_name = end($file_path);
+								$route = explode(".", $file_name)[0];
+								if ($route === 'students_logs') {
+									echo 'active';
+								}
+								?>">
+						<a href="students_logs">
+							<i class="nc-icon nc-single-02"></i>
+							<p>Students</p>
+						</a>
+					</li>
+				<?php
+				endif;
+				?>
+				<li class="<?php
+							$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
+							$file_name = end($file_path);
+							$route = explode(".", $file_name)[0];
+							if ($route === 'analysis') {
+								echo 'active';
+							}
+							?>">
 					<a href="analysis">
 						<i class="nc-icon nc-chart-bar-32"></i>
 						<p>Analysis</p>

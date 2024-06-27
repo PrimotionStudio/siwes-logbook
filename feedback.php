@@ -26,9 +26,9 @@ if (isset($_GET["id"])) {
 // Confirm that the log is from the same company has the supervisor
 
 // $query_supervisor is gotten from the validate.php script
-$get_supervisor = mysqli_fetch_assoc($query_supervisor);
-$supervisor_id = $get_supervisor["id"];
-$company_id = $get_supervisor["company_id"];
+$get_lecturer = mysqli_fetch_assoc($query_lecturer);
+$supervisor_id = $get_lecturer["id"];
+$company_id = $get_lecturer["company_id"];
 
 if ($get_log["company_id"] == $company_id) {
 	// Confirmed

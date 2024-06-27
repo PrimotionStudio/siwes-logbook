@@ -111,13 +111,13 @@ require_once "func/edit-log.php";
                   <?php
                   while ($get_feedback = mysqli_fetch_assoc($query_feedback)) :
                     $supervisor_id = $get_feedback["supervisor_id"];
-                    $select_supervisor = "SELECT * FROM supervisors WHERE id='$supervisor_id'";
-                    $query_supervisor = mysqli_query($con, $select_supervisor);
-                    if (mysqli_num_rows($query_supervisor) == 0) {
+                    $select_lecturer = "SELECT * FROM supervisors WHERE id='$supervisor_id'";
+                    $query_lecturer = mysqli_query($con, $select_lecturer);
+                    if (mysqli_num_rows($query_lecturer) == 0) {
                       continue; // At this point, i dont know what else to do
                     }
-                    $get_supervisor = mysqli_fetch_assoc($query_supervisor);
-                    $supervisor_user_id = $get_supervisor["user_id"];
+                    $get_lecturer = mysqli_fetch_assoc($query_lecturer);
+                    $supervisor_user_id = $get_lecturer["user_id"];
                     $select_supervisor_user = "SELECT * FROM users WHERE id='$supervisor_user_id'";
                     $query_supervisor_user = mysqli_query($con, $select_supervisor_user);
                     if (mysqli_num_rows($query_supervisor_user) == 0) {
