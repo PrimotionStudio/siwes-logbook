@@ -101,6 +101,51 @@
 				<?php
 				endif;
 				?>
+				<?php
+				if ($get_user["role"] === 'admin') :
+				?>
+					<li class="<?php
+								$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
+								$file_name = end($file_path);
+								$route = explode(".", $file_name)[0];
+								if ($route === 'users') {
+									echo 'active';
+								}
+								?>">
+						<a href="users">
+							<i class="nc-icon nc-single-02"></i>
+							<p>Users</p>
+						</a>
+					</li>
+					<li class="<?php
+								$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
+								$file_name = end($file_path);
+								$route = explode(".", $file_name)[0];
+								if ($route === '_logs') {
+									echo 'active';
+								}
+								?>">
+						<a href="users">
+							<i class="nc-icon nc-single-copy-04"></i>
+							<p>Logs</p>
+						</a>
+					</li>
+					<li class="<?php
+								$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
+								$file_name = end($file_path);
+								$route = explode(".", $file_name)[0];
+								if ($route === 'feedbacks') {
+									echo 'active';
+								}
+								?>">
+						<a href="feedbacks">
+							<i class="nc-icon nc-chat-33"></i>
+							<p>Feedbacks</p>
+						</a>
+					</li>
+				<?php
+				endif;
+				?>
 				<li class="<?php
 							$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
 							$file_name = end($file_path);
