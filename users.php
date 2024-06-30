@@ -27,7 +27,6 @@ $query_all_user = mysqli_query($con, $select_all_user);
                             <div class="float-right">
                                 <label for="category">Users Category</label>
                                 <select name="role" class="form-control" onchange="showUsers(this.value)" id="role">
-                                    <option value="">Nil</option>
                                     <option value="1" selected>All</option>
                                     <option value="2">None</option>
                                     <option value="3">Students</option>
@@ -57,7 +56,7 @@ $query_all_user = mysqli_query($con, $select_all_user);
                                             Category
                                         </th>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="users">
                                         <?php
                                         while ($get_all_user = mysqli_fetch_assoc($query_all_user)) :
                                         ?>

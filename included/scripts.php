@@ -18,14 +18,15 @@
 			return;
 		} else {
 			var xmlhttp = new XMLHttpRequest();
-			xmlhttp.onreadystatechange = function () {
+			xmlhttp.onreadystatechange = function() {
 				if (this.readyState == 4 && this.status == 200) {
-					document.getElementById("txtHint").innerHTML =
-						this.responseText;
+					document.getElementById("users").innerHTML = this.responseText;
 				}
 			};
-			xmlhttp.open("GET", "getuser.php?q=" + category, true);
-			xmlhttp.send();
+			xmlhttp.open("POST", "func/getusers", true);
+			xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			xmlhttp.send("category=" + encodeURIComponent(category));
+
 		}
 	}
 </script>
