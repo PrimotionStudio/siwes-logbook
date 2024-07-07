@@ -29,16 +29,18 @@ require_once "func/login.php";
 	<div class="wrapper">
 		<header>
 			<h1>Digital SIWES Logbook</h1>
+			<h6>in Rivers State University</h6>
 		</header>
 		<div class="row">
 			<div class="col-lg-4 col-md-3"></div>
 			<div class="col-lg-4 col-md-6">
 				<div class="card card-md card-user border-top">
-					<div class="card-header" style="display: flex; align-items: center; justify-content: space-evenly">
+				<div class="card-header">
+				<!-- <div class="card-header" style="display: flex; align-items: center; justify-content: space-evenly"> -->
 						<a href="index"><i class="nc-icon nc-minimal-left text-body small" style="font-size: 1rem"></i></a>
-						<h5 class="card-title text-center">By
+						<!-- <h5 class="card-title text-center">By
 							<a href="https://theprimotionstudio.wordpress.com">Martins Obomate Okanlawon</a>
-						</h5>
+						</h5> -->
 					</div>
 					<div class="card-body">
 						<form action="" method="post">

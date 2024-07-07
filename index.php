@@ -25,10 +25,11 @@ const PAGE_TITLE = "Digital SIWES Logbook";
 <body class="demo-icons">
 	<header>
 		<h1>Digital SIWES Logbook</h1>
-		<p>
+		<h6>in Rivers State University</h6>
+		<!-- <p>
 			By
 			<a href="https://theprimotionstudio.wordpress.com">Martins Obomate Okanlawon</a>
-		</p>
+		</p> -->
 	</header>
 	<div id="icons-wrapper">
 		<section>
