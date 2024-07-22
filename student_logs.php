@@ -2,7 +2,7 @@
 require_once "required/session.php";
 require_once "required/sql.php";
 require_once "required/validate.php";
-require_once "access/supervisor_only.php";
+require_once "access/lecturer_only.php";
 const PAGE_TITLE = "Student Logs - Digital Logbook System";
 include_once "included/head.php";
 
@@ -24,16 +24,22 @@ if (isset($_GET["id"])) {
   exit;
 }
 
-// Get logs from particular student
-$select_log = "SELECT * FROM logs WHERE user_id='$student_user_id'";
-$query_log = mysqli_query($con, $select_log);
-// If there are no logs by this student, do nothing
-// It has no side-effects
+// $query_lecturer is gotten from the validate.php script
+$get_lecturer = mysqli_fetch_assoc($query_lecturer);
+// Get Student Info
+$dept = $get_lecturer["department"];
+$faculty = $get_lecturer["faculty"];
+$select_student = "SELECT * FROM students WHERE user_id='$student_user_id' && department='$dept' && faculty='$faculty'";
+$query_student = mysqli_query($con, $select_student);
+if (mysqli_num_rows($query_student) == 0) {
+  $_SESSION["alert"] = "Could not find student information";
+  // Takes you to *home* so that you can be redirected to the appropriate route
+  header("location: home");
+  exit;
+}
+$get_student = mysqli_fetch_assoc($query_student);
 
-// $query_supervisor is gotten from the validate.php script
-$get_supervisor = mysqli_fetch_assoc($query_supervisor);
-$company_id = $get_supervisor["company_id"];
-
+$company_id = $get_student["company_id"];
 // Get Company Info
 $select_company = "SELECT * FROM company WHERE id='$company_id'";
 $query_company = mysqli_query($con, $select_company);
@@ -43,6 +49,13 @@ if (mysqli_num_rows($query_company) == 0) {
   exit;
 }
 $get_company = mysqli_fetch_assoc($query_company);
+
+// Get Logs
+// Get logs from particular student
+$select_log = "SELECT * FROM logs WHERE user_id='$student_user_id' && company_id='$company_id'";
+$query_log = mysqli_query($con, $select_log);
+// If there are no logs by this student, do nothing
+// It has no side-effects
 ?>
 <div class="wrapper ">
   <?php
@@ -81,7 +94,7 @@ $get_company = mysqli_fetch_assoc($query_company);
                         <td><?= date("d/m/Y", strtotime($get_log["datetime"])) ?></td>
                         <td><?= $get_log["activity"] ?></td>
                         <td class="text-right">
-                          <a href="feedback?id=<?= $get_log["id"] ?>" title="more">
+                          <a href="view-log?user_id=<?= $student_user_id ?>&log_id=<?= $get_log["id"] ?>" title="more">
                             <i class="nc-icon nc-minimal-right"></i>
                           </a>
                         </td>

@@ -81,6 +81,14 @@ require_once "func/log-entry.php";
                   </div>
                 </div>
                 <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label>Attachment</label>
+                      <input type="file" class="form-control" style="position: relative; opacity: 100;" name="attachment" accept=".pdf, .docx, .xlsx, .pptx, .jpg, .jpeg, .png">
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
                   <div class="ml-auto mr-auto">
                     <button type="submit" class="btn btn-primary btn-round">Log</button>
                   </div>

@@ -76,7 +76,7 @@ require_once "func/feedback.php";
                               <td><?= $get_student["faculty"] ?></td>
                               <td><?= $get_student["department"] ?></td>
                               <td class="text-right">
-                                <a href="student-logs?id=<?= $get_student_user["id"] ?>" title="more">
+                                <a href="student_logs?id=<?= $get_student_user["id"] ?>" title="more">
                                   <i class="nc-icon nc-minimal-right"></i>
                                 </a>
                               </td>
