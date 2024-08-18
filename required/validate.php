@@ -49,11 +49,11 @@ if (isset($_SESSION["loginkey"]) && isset($_SESSION["user_id"])) {
 		}
 	} else {
 		$_SESSION["alert"] = "Session expired, please login again";
-		(file_exists('logout')) ? header("location: logout") : header("location: ../logout");
+		(file_exists('logout.php')) ? header("location: logout") : header("location: ../logout");
 		exit;
 	}
 } else {
 	$_SESSION["alert"] = "Session expired, please login again";
-	(file_exists('logout')) ? header("location: logout") : header("location: ../logout");
+	(file_exists('logout.php')) ? header("location: logout") : header("location: ../logout");
 	exit;
 }
