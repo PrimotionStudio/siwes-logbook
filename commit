@@ -1,0 +1,814 @@
+diff --git a/analysis.php b/analysis.php
+deleted file mode 100644
+index 8bed5b6..0000000
+--- a/analysis.php
++++ /dev/null
+@@ -1,183 +0,0 @@
+-<!--
+-=========================================================
+-* Paper Dashboard 2 - v2.0.1
+-=========================================================
+-
+-* Product Page: https://www.creative-tim.com/product/paper-dashboard-2
+-* Copyright 2020 Creative Tim (https://www.creative-tim.com)
+-
+-Coded by www.creative-tim.com
+-
+- =========================================================
+-
+-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+--->
+-
+-<?php
+-require_once "required/session.php";
+-require_once "required/sql.php";
+-require_once "required/validate.php";
+-const PAGE_TITLE = "Anaysis";
+-include_once "included/head.php";
+-require_once "included/alert.php";
+-
+-$select_disasters = "SELECT * FROM disasters";
+-$query_disasters = mysqli_query($con, $select_disasters);
+-$disaster_types = [];
+-while ($get_disaster = mysqli_fetch_assoc($query_disasters)) {
+-  $disaster_types[] = $get_disaster["disaster"];
+-}
+-$disaster_types = array_unique($disaster_types);
+-require_once "func/login.php";
+-?>
+-<div class="wrapper ">
+-  <?php
+-  include_once "included/sidebar.php";
+-  ?>
+-  <div class="main-panel">
+-    <?php
+-    include_once "included/navbar.php";
+-    ?>
+-    <div class="content">
+-      <div class="row">
+-        <div class="col-lg-3 col-md-6 col-sm-6">
+-          <div class="card card-stats">
+-            <div class="card-body ">
+-              <div class="row">
+-                <div class="col-5 col-md-4">
+-                  <div class="icon-big text-center icon-warning">
+-                    <i class="nc-icon nc-globe text-warning"></i>
+-                  </div>
+-                </div>
+-                <div class="col-7 col-md-8">
+-                  <div class="numbers">
+-                    <p class="card-category">Reports</p>
+-                    <p class="card-title"><?= mysqli_num_rows($query_disasters) ?></p>
+-                  </div>
+-                </div>
+-              </div>
+-            </div>
+-            <div class="card-footer ">
+-              <hr>
+-              <div class="stats">
+-                <i class="fa fa-refresh"></i>
+-                Updated Now
+-              </div>
+-            </div>
+-          </div>
+-        </div>
+-      </div>
+-      <div class="row">
+-        <div class="col-md-12">
+-          <div class="card">
+-            <div class="card-header">
+-              <h4 class="card-title">Reported Occurances</h4>
+-            </div>
+-            <div class="card-body">
+-            <canvas id="occurance" width="507" height="126"></canvas>
+-            </div>
+-          </div>
+-        </div>
+-      </div>
+-
+-      <div class="row">
+-        <div class="col-md-12">
+-          <div class="card">
+-            <div class="card-header">
+-              <h4 class="card-title">Reported Severity/Occurances</h4>
+-            </div>
+-            <div class="card-body">
+-            <canvas id="sever_occur" width="507" height="126"></canvas>
+-            </div>
+-          </div>
+-        </div>
+-      </div>
+-      <div class="row">
+-      <?php
+-      foreach ($disaster_types as $type):
+-      ?>
+-        <div class="col-md-6">
+-          <div class="card">
+-            <div class="card-header">
+-              <h4 class="card-title"><?= ucfirst($type) ?> Severity</h4>
+-            </div>
+-            <div class="card-body">
+-            <canvas id="<?= $type ?>_chart" width="507" height="126"></canvas>
+-            </div>
+-          </div>
+-        </div>
+-      <?php
+-      endforeach;
+-      ?>
+-      </div>
+-      <div class="row">
+-        <div class="col-md-12">
+-          <div class="card">
+-            <div class="card-header">
+-              <h4 class="card-title">Reported Disasters</h4>
+-            </div>
+-            <div class="card-body">
+-              <div class="">
+-                <table class="table table-hover">
+-                  <thead class="text-primary">
+-                    <th>
+-                      Disaster Type
+-                    </th>
+-                    <th>
+-                      Severity
+-                    </th>
+-                    <th>
+-                      Location
+-                    </th>
+-                    <th>
+-                      Event Date/Time
+-                    </th>
+-                    <th class="text-right">
+-                      Action
+-                    </th>
+-                  </thead>
+-                  <tbody>
+-                    <?php
+-                    $query_disasters = mysqli_query($con, $select_disasters);
+-                    while ($get_disaster = mysqli_fetch_assoc($query_disasters)) :
+-                    ?>
+-                      <tr>
+-                        <td>
+-                          <?= $get_disaster["disaster"] ?>
+-                        </td>
+-                        <td>
+-                          <?= $get_disaster["severity"] ?>
+-                        </td>
+-                        <td>
+-                          <?= $get_disaster["location"] ?>
+-                        </td>
+-                        <td>
+-                          <?= date('d, M Y - h:iA', strtotime($get_disaster["event_datetime"])) ?>
+-                        </td>
+-                        <td class="text-right">
+-                          <a href="disaster-details?id=<?= $get_disaster["id"] ?>" title="more">
+-                            <i class="nc-icon nc-minimal-right"></i>
+-                          </a>
+-                        </td>
+-                      </tr>
+-                    <?php
+-                    endwhile;
+-                    ?>
+-                  </tbody>
+-                </table>
+-              </div>
+-            </div>
+-          </div>
+-        </div>
+-      </div>
+-    </div>
+-    <?php
+-    include_once "included/footer.php";
+-    ?>
+-  </div>
+-</div>
+-
+-<?php
+-include_once "included/scripts.php";
+-include_once "included/charts.php";
+-?>
+\ No newline at end of file
+diff --git a/func/edit-user.php b/func/edit-user.php
+index ad79c77..075ba38 100644
+--- a/func/edit-user.php
++++ b/func/edit-user.php
+@@ -57,70 +57,73 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
+ 			$_SESSION["alert"] = "That email or phone number is already registered with another user";
+ 			header("location: home");
+ 		}
+-		switch ($get_user["role"]) {
+-			case 'student':
+-				$matric = $_POST["matric"];
+-				$faculty = $_POST["faculty"];
+-				$department = $_POST["department"];
+-				$company_id = $_POST["company_id"];
+ 
+-				if ($matric == "" || $faculty == "" || $department == "" || $company_id == "") {
+-					$_SESSION["alert"] = "Matric Number, Faculty, Department or Company must not be empty";
+-					header("location: home");
+-					break;
+-				}
+-				$update_student = "UPDATE students SET matric='$matric', faculty='$faculty', department='$department', company_id='$company_id' WHERE user_id='$user_id'";
+-				if (mysqli_query($con, $update_student)) {
+-					$_SESSION["alert"] = "Information Updated";
+-					header("location: home");
+-				} else {
+-					$_SEESION["alert"] = "An error occured while updating information";
+-					header("location: home");
+-				}
+-				break;
+-			case 'supervisor':
+-				$company_id = $_POST["company_id"];
++		// No need to change user info from role.
++		// Admin can handle that
++		// switch ($get_user["role"]) {
++		// 	case 'student':
++		// 		$matric = $_POST["matric"];
++		// 		$faculty = $_POST["faculty"];
++		// 		$department = $_POST["department"];
++		// 		$company_id = $_POST["company_id"];
+ 
+-				if ($company_id == "") {
+-					$_SESSION["alert"] = "Company must not be empty";
+-					header("location: home");
+-					break;
+-				}
+-				$update_supervisor = "UPDATE supervisors SET company_id='$company_id' WHERE user_id='$user_id'";
+-				if (mysqli_query($con, $update_supervisor)) {
+-					$_SESSION["alert"] = "Information Updated";
+-					header("location: home");
+-				} else {
+-					$_SEESION["alert"] = "An error occured while updating information";
+-					header("location: home");
+-				}
+-				break;
+-			case 'lecturer':
+-				$department = $_POST["department"];
+-				$faculty = $_POST["faculty"];
++		// 		if ($matric == "" || $faculty == "" || $department == "" || $company_id == "") {
++		// 			$_SESSION["alert"] = "Matric Number, Faculty, Department or Company must not be empty";
++		// 			header("location: home");
++		// 			break;
++		// 		}
++		// 		$update_student = "UPDATE students SET matric='$matric', faculty='$faculty', department='$department', company_id='$company_id' WHERE user_id='$user_id'";
++		// 		if (mysqli_query($con, $update_student)) {
++		// 			$_SESSION["alert"] = "Information Updated";
++		// 			header("location: home");
++		// 		} else {
++		// 			$_SEESION["alert"] = "An error occured while updating information";
++		// 			header("location: home");
++		// 		}
++		// 		break;
++		// 	case 'supervisor':
++		// 		$company_id = $_POST["company_id"];
+ 
+-				if ($faculty == "" || $department == "") {
+-					$_SESSION["alert"] = "Faculty or Department must not be empty";
+-					header("location: home");
+-					break;
+-				}
+-				$update_lecturer = "UPDATE lecturers SET faculty='$faculty', department='$department' WHERE user_id='$user_id'";
+-				if (mysqli_query($con, $update_lecturer)) {
+-					$_SESSION["alert"] = "Information Updated";
+-					header("location: home");
+-				} else {
+-					$_SEESION["alert"] = "An error occured while updating information";
+-					header("location: home");
+-				}
+-				break;
+-			case 'admin':
+-				// Nothing here
+-				break;
+-			default:
+-				$_SESSION["alert"] = "Couldn't specify account type";
+-				header("location: home");
+-				break;
+-		}
++		// 		if ($company_id == "") {
++		// 			$_SESSION["alert"] = "Company must not be empty";
++		// 			header("location: home");
++		// 			break;
++		// 		}
++		// 		$update_supervisor = "UPDATE supervisors SET company_id='$company_id' WHERE user_id='$user_id'";
++		// 		if (mysqli_query($con, $update_supervisor)) {
++		// 			$_SESSION["alert"] = "Information Updated";
++		// 			header("location: home");
++		// 		} else {
++		// 			$_SEESION["alert"] = "An error occured while updating information";
++		// 			header("location: home");
++		// 		}
++		// 		break;
++		// 	case 'lecturer':
++		// 		$department = $_POST["department"];
++		// 		$faculty = $_POST["faculty"];
++
++		// 		if ($faculty == "" || $department == "") {
++		// 			$_SESSION["alert"] = "Faculty or Department must not be empty";
++		// 			header("location: home");
++		// 			break;
++		// 		}
++		// 		$update_lecturer = "UPDATE lecturers SET faculty='$faculty', department='$department' WHERE user_id='$user_id'";
++		// 		if (mysqli_query($con, $update_lecturer)) {
++		// 			$_SESSION["alert"] = "Information Updated";
++		// 			header("location: home");
++		// 		} else {
++		// 			$_SEESION["alert"] = "An error occured while updating information";
++		// 			header("location: home");
++		// 		}
++		// 		break;
++		// 	case 'admin':
++		// 		// Nothing here
++		// 		break;
++		// 	default:
++		// 		$_SESSION["alert"] = "Couldn't specify account type";
++		// 		header("location: home");
++		// 		break;
++		// }
+ 	}
+ 	exit;
+ }
+diff --git a/func/getusers.php b/func/getusers.php
+index c5b5336..5de6309 100644
+--- a/func/getusers.php
++++ b/func/getusers.php
+@@ -19,22 +19,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                 break;
+             case '4':
+                 $role = 'supervisor';
+-                # code...
++                break;
+             case '5':
+                 $role = 'lecturer';
+-                # code...
+                 break;
+             case '6':
+                 $role = 'admin';
+                 break;
+             default:
+                 $_SESSION["alert"] = "Cannot determine User's Category";
+-                http_response_code(400);
+                 header('location: ../users.php');
+                 exit;
+         }
+         $select_users = "SELECT * FROM users  WHERE role='$role'";
+     }
+     $query_users = mysqli_query($con, $select_users);
++    while ($get_course = mysqli_fetch_assoc($query_users)) :
++?>
++        <tr>
++            <td><?= $get_course["firstname"] ?></td>
++            <td><?= $get_course["lastname"] ?></td>
++            <td><?= $get_course["email"] ?></td>
++            <td><?= $get_course["phone"] ?></td>
++            <td>
++                <select name="role" class="form-control" onchange="setUserRole(<?= $get_course['id'] ?>,this.value)" id="role">
++                    <option value="1" <?php echo ($get_course["role"] == '') ? "selected" : "" ?>>None</option>
++                    <option value="2" <?php echo ($get_course["role"] == 'student') ? "selected" : "" ?>>Students</option>
++                    <option value="3" <?php echo ($get_course["role"] == 'supervisor') ? "selected" : "" ?>>Supervisor</option>
++                    <option value="4" <?php echo ($get_course["role"] == 'lecturer') ? "selected" : "" ?>>Lecturers</option>
++                    <option value="5" <?php echo ($get_course["role"] == 'admin') ? "selected" : "" ?>>Admin</option>
++                </select>
++            </td>
++        </tr>
++<?php
++    endwhile;
+     exit;
+ }
+diff --git a/home.php b/home.php
+index ebdd17e..d4fc747 100644
+--- a/home.php
++++ b/home.php
+@@ -79,13 +79,31 @@ include_once "included/head.php";
+ 											<div class="col-md-6">
+ 												<div class="form-group">
+ 													<label>Faculty</label>
+-													<input type="text" class="form-control" name="faculty" placeholder="Faculty" value="<?= $get_student["faculty"] ?>">
++													<?php
++													$select_faculty = "SELECT * FROM faculty WHERE id='" . $get_student["faculty"] . "' ORDER BY id DESC";
++													$query_faculty = mysqli_query($con, $select_faculty);
++													if (mysqli_num_rows($query_faculty) != 0) :
++														$get_faculty = mysqli_fetch_assoc($query_faculty)
++													?>
++														<input type="text" class="form-control" name="faculty" disabled="" value="<?= ucfirst($get_faculty["name"]) ?>">
++													<?php
++													endif;
++													?>
+ 												</div>
+ 											</div>
+ 											<div class="col-md-6">
+ 												<div class="form-group">
+ 													<label>Department</label>
+-													<input type="text" class="form-control" name="department" placeholder="Department" value="<?= $get_student["department"] ?>">
++													<?php
++													$select_department = "SELECT * FROM departments WHERE id='" . $get_student["department"] . "' ORDER BY id DESC";
++													$query_department = mysqli_query($con, $select_department);
++													if (mysqli_num_rows($query_department) != 0) :
++														$get_department = mysqli_fetch_assoc($query_department)
++													?>
++														<input type="text" class="form-control" name="department" disabled="" value="<?= ucfirst($get_department["name"]) ?>">
++													<?php
++													endif;
++													?>
+ 												</div>
+ 											</div>
+ 										</div>
+@@ -104,13 +122,31 @@ include_once "included/head.php";
+ 											<div class="col-md-6">
+ 												<div class="form-group">
+ 													<label>Faculty</label>
+-													<input type="text" class="form-control" name="faculty" placeholder="Faculty" value="<?= $get_lecturer["faculty"] ?>">
++													<?php
++													$select_faculty = "SELECT * FROM faculty WHERE id='" . $get_lecturer["faculty"] . "' ORDER BY id DESC";
++													$query_faculty = mysqli_query($con, $select_faculty);
++													if (mysqli_num_rows($query_faculty) != 0) :
++														$get_faculty = mysqli_fetch_assoc($query_faculty)
++													?>
++														<input type="text" class="form-control" name="faculty" disabled="" value="<?= ucfirst($get_faculty["name"]) ?>">
++													<?php
++													endif;
++													?>
+ 												</div>
+ 											</div>
+ 											<div class="col-md-6">
+ 												<div class="form-group">
+ 													<label>Department</label>
+-													<input type="text" class="form-control" name="department" placeholder="Department" value="<?= $get_lecturer["department"] ?>">
++													<?php
++													$select_department = "SELECT * FROM departments WHERE id='" . $get_lecturer["department"] . "' ORDER BY id DESC";
++													$query_department = mysqli_query($con, $select_department);
++													if (mysqli_num_rows($query_department) != 0) :
++														$get_department = mysqli_fetch_assoc($query_department)
++													?>
++														<input type="text" class="form-control" name="department" disabled="" value="<?= ucfirst($get_department["name"]) ?>">
++													<?php
++													endif;
++													?>
+ 												</div>
+ 											</div>
+ 										</div>
+@@ -121,26 +157,24 @@ include_once "included/head.php";
+ 								<div class="row">
+ 									<?php
+ 									if ($get_user["role"] === 'supervisor') :
+-										$select_lecturer = "SELECT * FROM supervisors WHERE user_id='$user_id'";
+-										$query_lecturer = mysqli_query($con, $select_lecturer);
+-										if (mysqli_num_rows($query_lecturer) !== 0) :
+-											$get_lecturer = mysqli_fetch_assoc($query_lecturer);
++										$select_supervisor = "SELECT * FROM supervisors WHERE user_id='$user_id'";
++										$query_supervisor = mysqli_query($con, $select_supervisor);
++										if (mysqli_num_rows($query_supervisor) !== 0) :
++											$get_supervisor = mysqli_fetch_assoc($query_supervisor);
++											$company_id = $get_supervisor["company_id"];
+ 									?>
+ 											<div class="col-md-6">
+ 												<div class="form-group">
+ 													<label>Company</label>
+-													<select name="company_id" class="form-control" required>
+-														<option value="">--Select a company you want to intern at--</option>
+-														<?php
+-														$select_company = "SELECT * FROM company ORDER BY name ASC";
+-														$query_company = mysqli_query($con, $select_company);
+-														while ($get_company = mysqli_fetch_assoc($query_company)) :
+-														?>
+-															<option value="<?= $get_company["id"] ?>" <?= ($get_lecturer["company_id"] == $get_company["id"] ? "selected" : "") ?>><?= $get_company["name"] ?></option>
+-														<?php
+-														endwhile;
+-														?>
+-													</select>
++													<?php
++													$select_company = "SELECT * FROM company WHERE id='$company_id'";
++													$query_company = mysqli_query($con, $select_company);
++													while ($get_company = mysqli_fetch_assoc($query_company)) :
++													?>
++														<input type="text" class="form-control" name="comapany" disabled="" value="<?= ucfirst($get_company["name"]) ?>">
++													<?php
++													endwhile;
++													?>
+ 												</div>
+ 											</div>
+ 									<?php
+@@ -153,22 +187,20 @@ include_once "included/head.php";
+ 										$query_student = mysqli_query($con, $select_student);
+ 										if (mysqli_num_rows($query_student) !== 0) :
+ 											$get_student = mysqli_fetch_assoc($query_student);
++											$company_id = $get_student["company_id"];
+ 									?>
+ 											<div class="col-md-6">
+ 												<div class="form-group">
+ 													<label>Company</label>
+-													<select name="company_id" class="form-control" required>
+-														<option value="">--Select a company you want to intern at--</option>
+-														<?php
+-														$select_company = "SELECT * FROM company ORDER BY name ASC";
+-														$query_company = mysqli_query($con, $select_company);
+-														while ($get_company = mysqli_fetch_assoc($query_company)) :
+-														?>
+-															<option value="<?= $get_company["id"] ?>" <?= ($get_student["company_id"] == $get_company["id"] ? "selected" : "") ?>><?= $get_company["name"] ?></option>
+-														<?php
+-														endwhile;
+-														?>
+-													</select>
++													<?php
++													$select_company = "SELECT * FROM company WHERE id='$company_id'";
++													$query_company = mysqli_query($con, $select_company);
++													while ($get_company = mysqli_fetch_assoc($query_company)) :
++													?>
++														<input type="text" class="form-control" name="comapany" disabled="" value="<?= ucfirst($get_company["name"]) ?>">
++													<?php
++													endwhile;
++													?>
+ 												</div>
+ 											</div>
+ 									<?php
+diff --git a/included/scripts.php b/included/scripts.php
+index 9303a4b..19725db 100644
+--- a/included/scripts.php
++++ b/included/scripts.php
+@@ -12,6 +12,26 @@
+ 		demo.initChartsPages();
+ 	});
+ 
++	function setUserRole(user_id, role) {
++		if (user_id === "" || role === "") {
++			demo.showNotification("top", "right", "Cannot find user or role");
++			return;
++		} else {
++			var xmlhttp = new XMLHttpRequest();
++			xmlhttp.onreadystatechange = function() {
++				if (this.readyState == 4 && this.status == 200) {
++					if (this.responseText == "Refresh") {
++						window.location.reload()
++					}
++				}
++			};
++			xmlhttp.open("POST", "func/setuserrole", true);
++			xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
++			xmlhttp.send("user_id=" + encodeURIComponent(user_id) + "&role=" + encodeURIComponent(role));
++
++		}
++	}
++
+ 	function showUsers(category) {
+ 		if (category === "") {
+ 			demo.showNotification("top", "right", "Cannot find user category");
+diff --git a/included/sidebar.php b/included/sidebar.php
+index 0d9c40b..272572c 100644
+--- a/included/sidebar.php
++++ b/included/sidebar.php
+@@ -121,44 +121,44 @@
+ 								$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
+ 								$file_name = end($file_path);
+ 								$route = explode(".", $file_name)[0];
+-								if ($route === '_logs') {
++								if ($route === 'faculty') {
+ 									echo 'active';
+ 								}
+ 								?>">
+-						<a href="users">
+-							<i class="nc-icon nc-single-copy-04"></i>
+-							<p>Logs</p>
++						<a href="faculty">
++							<i class="nc-icon nc-app"></i>
++							<p>Faculty</p>
+ 						</a>
+ 					</li>
+ 					<li class="<?php
+ 								$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
+ 								$file_name = end($file_path);
+ 								$route = explode(".", $file_name)[0];
+-								if ($route === 'feedbacks') {
++								if ($route === 'company') {
+ 									echo 'active';
+ 								}
+ 								?>">
++						<a href="company">
++							<i class="nc-icon nc-world-2"></i>
++							<p>Company</p>
++						</a>
++					</li>
++					<!-- <li class="<?php
++									$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
++									$file_name = end($file_path);
++									$route = explode(".", $file_name)[0];
++									if ($route === 'feedbacks') {
++										echo 'active';
++									}
++									?>">
+ 						<a href="feedbacks">
+ 							<i class="nc-icon nc-chat-33"></i>
+ 							<p>Feedbacks</p>
+ 						</a>
+-					</li>
++					</li> -->
+ 				<?php
+ 				endif;
+ 				?>
+-				<li class="<?php
+-							$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
+-							$file_name = end($file_path);
+-							$route = explode(".", $file_name)[0];
+-							if ($route === 'analysis') {
+-								echo 'active';
+-							}
+-							?>">
+-					<a href="analysis">
+-						<i class="nc-icon nc-chart-bar-32"></i>
+-						<p>Analysis</p>
+-					</a>
+-				</li>
+ 			<?php
+ 			endif;
+ 			?>
+diff --git a/lecturers.php b/lecturers.php
+index fdb3ace..39721ad 100644
+--- a/lecturers.php
++++ b/lecturers.php
+@@ -12,9 +12,9 @@ if (isset($_SESSION["loginkey"]) && isset($_SESSION["user_id"])) {
+ 		// Login Validated
+ 		$get_user = mysqli_fetch_assoc($query_user);
+ 
+-		$select_student = "SELECT * FROM students WHERE user_id='$user_id'";
+-		$query_student = mysqli_query($con, $select_student);
+-		if (mysqli_num_rows($query_student) !== 0) {
++		$select_lecturer = "SELECT * FROM lecturers WHERE user_id='$user_id'";
++		$query_lecturer = mysqli_query($con, $select_lecturer);
++		if (mysqli_num_rows($query_lecturer) !== 0) {
+ 			$_SESSION["alert"] = "Your information have been completed.";
+ 			header("location: home");
+ 			exit;
+@@ -91,13 +91,26 @@ require_once "func/lecturers.php";
+ 									<div class="col-md-6">
+ 										<div class="form-group">
+ 											<label>Faculty</label>
+-											<input type="text" class="form-control" name="faculty" placeholder="Faculty" required>
++											<select class="form-control" name="faculty" id="faculty" required>
++												<option value="" disabled selected>--Select-a-faculty--</option>
++												<?php
++												$select_faculty = "SELECT * FROM faculty ORDER BY id DESC";
++												$query_faculty = mysqli_query($con, $select_faculty);
++												if (mysqli_num_rows($query_faculty) != 0) :
++													while ($get_faculty = mysqli_fetch_assoc($query_faculty)) :
++												?>
++														<option value="<?= $get_faculty["id"] ?>"><?= $get_faculty["name"] ?></option>
++												<?php
++													endwhile;
++												endif;
++												?>
++											</select>
+ 										</div>
+ 									</div>
+ 									<div class="col-md-6">
+ 										<div class="form-group">
+ 											<label>Department</label>
+-											<input type="text" class="form-control" name="department" placeholder="Department" required>
++											<select class="form-control" name="department" id="department" required></select>
+ 										</div>
+ 									</div>
+ 								</div>
+@@ -118,6 +131,36 @@ require_once "func/lecturers.php";
+ 	</div>
+ </div>
+ 
++<script>
++	document.addEventListener('DOMContentLoaded', function() {
++		var faculty = document.getElementById('faculty');
++		var department = document.getElementById('department');
++
++		faculty.addEventListener('change', function() {
++			var facultyId = this.value;
++			if (facultyId !== "") {
++				fetch('func/fetch_departments', {
++						method: 'POST',
++						headers: {
++							'Content-Type': 'application/x-www-form-urlencoded'
++						},
++						body: 'faculty_id=' + facultyId
++					})
++					.then(response => response.text())
++					.then(data => {
++						department.innerHTML = data;
++					})
++					.catch(error => {
++						console.error('Error:', error);
++						department.innerHTML = '<option value="" disabled selected>Please refresh and try again</option>';
++					});
++			} else {
++				department.innerHTML = '<option value="" disabled selected>Please refresh and try again</option>';
++			}
++		});
++	});
++</script>
++
+ <?php
+ include_once "included/scripts.php";
+ ?>
+\ No newline at end of file
+diff --git a/students.php b/students.php
+index dbc7a32..2cd5239 100644
+--- a/students.php
++++ b/students.php
+@@ -99,13 +99,26 @@ require_once "func/students.php";
+ 									<div class="col-md-6">
+ 										<div class="form-group">
+ 											<label>Faculty</label>
+-											<input type="text" class="form-control" name="faculty" placeholder="Faculty" required>
++											<select class="form-control" name="faculty" id="faculty" required>
++												<option value="" disabled selected>--Select-a-faculty--</option>
++												<?php
++												$select_faculty = "SELECT * FROM faculty ORDER BY id DESC";
++												$query_faculty = mysqli_query($con, $select_faculty);
++												if (mysqli_num_rows($query_faculty) != 0) :
++													while ($get_faculty = mysqli_fetch_assoc($query_faculty)) :
++												?>
++														<option value="<?= $get_faculty["id"] ?>"><?= $get_faculty["name"] ?></option>
++												<?php
++													endwhile;
++												endif;
++												?>
++											</select>
+ 										</div>
+ 									</div>
+ 									<div class="col-md-6">
+ 										<div class="form-group">
+ 											<label>Department</label>
+-											<input type="text" class="form-control" name="department" placeholder="Department" required>
++											<select class="form-control" name="department" id="department" required></select>
+ 										</div>
+ 									</div>
+ 								</div>
+@@ -145,6 +158,36 @@ require_once "func/students.php";
+ 	</div>
+ </div>
+ 
++<script>
++	document.addEventListener('DOMContentLoaded', function() {
++		var faculty = document.getElementById('faculty');
++		var department = document.getElementById('department');
++
++		faculty.addEventListener('change', function() {
++			var facultyId = this.value;
++			if (facultyId !== "") {
++				fetch('func/fetch_departments', {
++						method: 'POST',
++						headers: {
++							'Content-Type': 'application/x-www-form-urlencoded'
++						},
++						body: 'faculty_id=' + facultyId
++					})
++					.then(response => response.text())
++					.then(data => {
++						department.innerHTML = data;
++					})
++					.catch(error => {
++						console.error('Error:', error);
++						department.innerHTML = '<option value="" disabled selected>Please refresh and try again</option>';
++					});
++			} else {
++				department.innerHTML = '<option value="" disabled selected>Please refresh and try again</option>';
++			}
++		});
++	});
++</script>
++
+ <?php
+ include_once "included/scripts.php";
+ ?>
+\ No newline at end of file
+diff --git a/supervisors.php b/supervisors.php
+index c9aec4a..16c4759 100644
+--- a/supervisors.php
++++ b/supervisors.php
+@@ -12,9 +12,9 @@ if (isset($_SESSION["loginkey"]) && isset($_SESSION["user_id"])) {
+ 		// Login Validated
+ 		$get_user = mysqli_fetch_assoc($query_user);
+ 
+-		$select_student = "SELECT * FROM students WHERE user_id='$user_id'";
+-		$query_student = mysqli_query($con, $select_student);
+-		if (mysqli_num_rows($query_student) !== 0) {
++		$select_supervisor = "SELECT * FROM supervisors WHERE user_id='$user_id'";
++		$query_supervisor = mysqli_query($con, $select_supervisor);
++		if (mysqli_num_rows($query_supervisor) !== 0) {
+ 			$_SESSION["alert"] = "Your information have been completed.";
+ 			header("location: home");
+ 			exit;
+diff --git a/users.php b/users.php
+index dd75177..75c7290 100644
+--- a/users.php
++++ b/users.php
+@@ -65,7 +65,15 @@ $query_all_user = mysqli_query($con, $select_all_user);
+                                                 <td><?= $get_all_user["lastname"] ?></td>
+                                                 <td><?= $get_all_user["email"] ?></td>
+                                                 <td><?= $get_all_user["phone"] ?></td>
+-                                                <td><?= $get_all_user["role"] ?></td>
++                                                <td>
++                                                    <select name="role" class="form-control" onchange="setUserRole(<?= $get_all_user['id'] ?>,this.value)" id="role">
++                                                        <option value="1" <?php echo ($get_all_user["role"] == '') ? "selected" : "" ?>>None</option>
++                                                        <option value="2" <?php echo ($get_all_user["role"] == 'student') ? "selected" : "" ?>>Students</option>
++                                                        <option value="3" <?php echo ($get_all_user["role"] == 'supervisor') ? "selected" : "" ?>>Supervisor</option>
++                                                        <option value="4" <?php echo ($get_all_user["role"] == 'lecturer') ? "selected" : "" ?>>Lecturers</option>
++                                                        <option value="5" <?php echo ($get_all_user["role"] == 'admin') ? "selected" : "" ?>>Admin</option>
++                                                    </select>
++                                                </td>
+                                             </tr>
+                                         <?php
+                                         endwhile;

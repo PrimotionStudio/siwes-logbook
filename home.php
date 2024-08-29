@@ -79,13 +79,31 @@ include_once "included/head.php";
 											<div class="col-md-6">
 												<div class="form-group">
 													<label>Faculty</label>
-													<input type="text" class="form-control" name="faculty" placeholder="Faculty" value="<?= $get_student["faculty"] ?>">
+													<?php
+													$select_faculty = "SELECT * FROM faculty WHERE id='" . $get_student["faculty"] . "' ORDER BY id DESC";
+													$query_faculty = mysqli_query($con, $select_faculty);
+													if (mysqli_num_rows($query_faculty) != 0) :
+														$get_faculty = mysqli_fetch_assoc($query_faculty)
+													?>
+														<input type="text" class="form-control" name="faculty" disabled="" value="<?= ucfirst($get_faculty["name"]) ?>">
+													<?php
+													endif;
+													?>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label>Department</label>
-													<input type="text" class="form-control" name="department" placeholder="Department" value="<?= $get_student["department"] ?>">
+													<?php
+													$select_department = "SELECT * FROM departments WHERE id='" . $get_student["department"] . "' ORDER BY id DESC";
+													$query_department = mysqli_query($con, $select_department);
+													if (mysqli_num_rows($query_department) != 0) :
+														$get_department = mysqli_fetch_assoc($query_department)
+													?>
+														<input type="text" class="form-control" name="department" disabled="" value="<?= ucfirst($get_department["name"]) ?>">
+													<?php
+													endif;
+													?>
 												</div>
 											</div>
 										</div>
@@ -104,13 +122,31 @@ include_once "included/head.php";
 											<div class="col-md-6">
 												<div class="form-group">
 													<label>Faculty</label>
-													<input type="text" class="form-control" name="faculty" placeholder="Faculty" value="<?= $get_lecturer["faculty"] ?>">
+													<?php
+													$select_faculty = "SELECT * FROM faculty WHERE id='" . $get_lecturer["faculty"] . "' ORDER BY id DESC";
+													$query_faculty = mysqli_query($con, $select_faculty);
+													if (mysqli_num_rows($query_faculty) != 0) :
+														$get_faculty = mysqli_fetch_assoc($query_faculty)
+													?>
+														<input type="text" class="form-control" name="faculty" disabled="" value="<?= ucfirst($get_faculty["name"]) ?>">
+													<?php
+													endif;
+													?>
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label>Department</label>
-													<input type="text" class="form-control" name="department" placeholder="Department" value="<?= $get_lecturer["department"] ?>">
+													<?php
+													$select_department = "SELECT * FROM departments WHERE id='" . $get_lecturer["department"] . "' ORDER BY id DESC";
+													$query_department = mysqli_query($con, $select_department);
+													if (mysqli_num_rows($query_department) != 0) :
+														$get_department = mysqli_fetch_assoc($query_department)
+													?>
+														<input type="text" class="form-control" name="department" disabled="" value="<?= ucfirst($get_department["name"]) ?>">
+													<?php
+													endif;
+													?>
 												</div>
 											</div>
 										</div>
@@ -121,26 +157,24 @@ include_once "included/head.php";
 								<div class="row">
 									<?php
 									if ($get_user["role"] === 'supervisor') :
-										$select_lecturer = "SELECT * FROM supervisors WHERE user_id='$user_id'";
-										$query_lecturer = mysqli_query($con, $select_lecturer);
-										if (mysqli_num_rows($query_lecturer) !== 0) :
-											$get_lecturer = mysqli_fetch_assoc($query_lecturer);
+										$select_supervisor = "SELECT * FROM supervisors WHERE user_id='$user_id'";
+										$query_supervisor = mysqli_query($con, $select_supervisor);
+										if (mysqli_num_rows($query_supervisor) !== 0) :
+											$get_supervisor = mysqli_fetch_assoc($query_supervisor);
+											$company_id = $get_supervisor["company_id"];
 									?>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label>Company</label>
-													<select name="company_id" class="form-control" required>
-														<option value="">--Select a company you want to intern at--</option>
-														<?php
-														$select_company = "SELECT * FROM company ORDER BY name ASC";
-														$query_company = mysqli_query($con, $select_company);
-														while ($get_company = mysqli_fetch_assoc($query_company)) :
-														?>
-															<option value="<?= $get_company["id"] ?>" <?= ($get_lecturer["company_id"] == $get_company["id"] ? "selected" : "") ?>><?= $get_company["name"] ?></option>
-														<?php
-														endwhile;
-														?>
-													</select>
+													<?php
+													$select_company = "SELECT * FROM company WHERE id='$company_id'";
+													$query_company = mysqli_query($con, $select_company);
+													while ($get_company = mysqli_fetch_assoc($query_company)) :
+													?>
+														<input type="text" class="form-control" name="comapany" disabled="" value="<?= ucfirst($get_company["name"]) ?>">
+													<?php
+													endwhile;
+													?>
 												</div>
 											</div>
 									<?php
@@ -153,22 +187,20 @@ include_once "included/head.php";
 										$query_student = mysqli_query($con, $select_student);
 										if (mysqli_num_rows($query_student) !== 0) :
 											$get_student = mysqli_fetch_assoc($query_student);
+											$company_id = $get_student["company_id"];
 									?>
 											<div class="col-md-6">
 												<div class="form-group">
 													<label>Company</label>
-													<select name="company_id" class="form-control" required>
-														<option value="">--Select a company you want to intern at--</option>
-														<?php
-														$select_company = "SELECT * FROM company ORDER BY name ASC";
-														$query_company = mysqli_query($con, $select_company);
-														while ($get_company = mysqli_fetch_assoc($query_company)) :
-														?>
-															<option value="<?= $get_company["id"] ?>" <?= ($get_student["company_id"] == $get_company["id"] ? "selected" : "") ?>><?= $get_company["name"] ?></option>
-														<?php
-														endwhile;
-														?>
-													</select>
+													<?php
+													$select_company = "SELECT * FROM company WHERE id='$company_id'";
+													$query_company = mysqli_query($con, $select_company);
+													while ($get_company = mysqli_fetch_assoc($query_company)) :
+													?>
+														<input type="text" class="form-control" name="comapany" disabled="" value="<?= ucfirst($get_company["name"]) ?>">
+													<?php
+													endwhile;
+													?>
 												</div>
 											</div>
 									<?php

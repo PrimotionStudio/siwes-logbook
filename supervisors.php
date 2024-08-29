@@ -12,9 +12,9 @@ if (isset($_SESSION["loginkey"]) && isset($_SESSION["user_id"])) {
 		// Login Validated
 		$get_user = mysqli_fetch_assoc($query_user);
 
-		$select_student = "SELECT * FROM students WHERE user_id='$user_id'";
-		$query_student = mysqli_query($con, $select_student);
-		if (mysqli_num_rows($query_student) !== 0) {
+		$select_supervisor = "SELECT * FROM supervisors WHERE user_id='$user_id'";
+		$query_supervisor = mysqli_query($con, $select_supervisor);
+		if (mysqli_num_rows($query_supervisor) !== 0) {
 			$_SESSION["alert"] = "Your information have been completed.";
 			header("location: home");
 			exit;

@@ -121,44 +121,44 @@
 								$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
 								$file_name = end($file_path);
 								$route = explode(".", $file_name)[0];
-								if ($route === '_logs') {
+								if ($route === 'faculty') {
 									echo 'active';
 								}
 								?>">
-						<a href="users">
-							<i class="nc-icon nc-single-copy-04"></i>
-							<p>Logs</p>
+						<a href="faculty">
+							<i class="nc-icon nc-app"></i>
+							<p>Faculty</p>
 						</a>
 					</li>
 					<li class="<?php
 								$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
 								$file_name = end($file_path);
 								$route = explode(".", $file_name)[0];
-								if ($route === 'feedbacks') {
+								if ($route === 'company') {
 									echo 'active';
 								}
 								?>">
+						<a href="company">
+							<i class="nc-icon nc-world-2"></i>
+							<p>Company</p>
+						</a>
+					</li>
+					<!-- <li class="<?php
+									$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
+									$file_name = end($file_path);
+									$route = explode(".", $file_name)[0];
+									if ($route === 'feedbacks') {
+										echo 'active';
+									}
+									?>">
 						<a href="feedbacks">
 							<i class="nc-icon nc-chat-33"></i>
 							<p>Feedbacks</p>
 						</a>
-					</li>
+					</li> -->
 				<?php
 				endif;
 				?>
-				<li class="<?php
-							$file_path = explode("/", $_SERVER["SCRIPT_NAME"]);
-							$file_name = end($file_path);
-							$route = explode(".", $file_name)[0];
-							if ($route === 'analysis') {
-								echo 'active';
-							}
-							?>">
-					<a href="analysis">
-						<i class="nc-icon nc-chart-bar-32"></i>
-						<p>Analysis</p>
-					</a>
-				</li>
 			<?php
 			endif;
 			?>

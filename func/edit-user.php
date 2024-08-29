@@ -57,70 +57,73 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			$_SESSION["alert"] = "That email or phone number is already registered with another user";
 			header("location: home");
 		}
-		switch ($get_user["role"]) {
-			case 'student':
-				$matric = $_POST["matric"];
-				$faculty = $_POST["faculty"];
-				$department = $_POST["department"];
-				$company_id = $_POST["company_id"];
 
-				if ($matric == "" || $faculty == "" || $department == "" || $company_id == "") {
-					$_SESSION["alert"] = "Matric Number, Faculty, Department or Company must not be empty";
-					header("location: home");
-					break;
-				}
-				$update_student = "UPDATE students SET matric='$matric', faculty='$faculty', department='$department', company_id='$company_id' WHERE user_id='$user_id'";
-				if (mysqli_query($con, $update_student)) {
-					$_SESSION["alert"] = "Information Updated";
-					header("location: home");
-				} else {
-					$_SEESION["alert"] = "An error occured while updating information";
-					header("location: home");
-				}
-				break;
-			case 'supervisor':
-				$company_id = $_POST["company_id"];
+		// No need to change user info from role.
+		// Admin can handle that
+		// switch ($get_user["role"]) {
+		// 	case 'student':
+		// 		$matric = $_POST["matric"];
+		// 		$faculty = $_POST["faculty"];
+		// 		$department = $_POST["department"];
+		// 		$company_id = $_POST["company_id"];
 
-				if ($company_id == "") {
-					$_SESSION["alert"] = "Company must not be empty";
-					header("location: home");
-					break;
-				}
-				$update_supervisor = "UPDATE supervisors SET company_id='$company_id' WHERE user_id='$user_id'";
-				if (mysqli_query($con, $update_supervisor)) {
-					$_SESSION["alert"] = "Information Updated";
-					header("location: home");
-				} else {
-					$_SEESION["alert"] = "An error occured while updating information";
-					header("location: home");
-				}
-				break;
-			case 'lecturer':
-				$department = $_POST["department"];
-				$faculty = $_POST["faculty"];
+		// 		if ($matric == "" || $faculty == "" || $department == "" || $company_id == "") {
+		// 			$_SESSION["alert"] = "Matric Number, Faculty, Department or Company must not be empty";
+		// 			header("location: home");
+		// 			break;
+		// 		}
+		// 		$update_student = "UPDATE students SET matric='$matric', faculty='$faculty', department='$department', company_id='$company_id' WHERE user_id='$user_id'";
+		// 		if (mysqli_query($con, $update_student)) {
+		// 			$_SESSION["alert"] = "Information Updated";
+		// 			header("location: home");
+		// 		} else {
+		// 			$_SEESION["alert"] = "An error occured while updating information";
+		// 			header("location: home");
+		// 		}
+		// 		break;
+		// 	case 'supervisor':
+		// 		$company_id = $_POST["company_id"];
 
-				if ($faculty == "" || $department == "") {
-					$_SESSION["alert"] = "Faculty or Department must not be empty";
-					header("location: home");
-					break;
-				}
-				$update_lecturer = "UPDATE lecturers SET faculty='$faculty', department='$department' WHERE user_id='$user_id'";
-				if (mysqli_query($con, $update_lecturer)) {
-					$_SESSION["alert"] = "Information Updated";
-					header("location: home");
-				} else {
-					$_SEESION["alert"] = "An error occured while updating information";
-					header("location: home");
-				}
-				break;
-			case 'admin':
-				// Nothing here
-				break;
-			default:
-				$_SESSION["alert"] = "Couldn't specify account type";
-				header("location: home");
-				break;
-		}
+		// 		if ($company_id == "") {
+		// 			$_SESSION["alert"] = "Company must not be empty";
+		// 			header("location: home");
+		// 			break;
+		// 		}
+		// 		$update_supervisor = "UPDATE supervisors SET company_id='$company_id' WHERE user_id='$user_id'";
+		// 		if (mysqli_query($con, $update_supervisor)) {
+		// 			$_SESSION["alert"] = "Information Updated";
+		// 			header("location: home");
+		// 		} else {
+		// 			$_SEESION["alert"] = "An error occured while updating information";
+		// 			header("location: home");
+		// 		}
+		// 		break;
+		// 	case 'lecturer':
+		// 		$department = $_POST["department"];
+		// 		$faculty = $_POST["faculty"];
+
+		// 		if ($faculty == "" || $department == "") {
+		// 			$_SESSION["alert"] = "Faculty or Department must not be empty";
+		// 			header("location: home");
+		// 			break;
+		// 		}
+		// 		$update_lecturer = "UPDATE lecturers SET faculty='$faculty', department='$department' WHERE user_id='$user_id'";
+		// 		if (mysqli_query($con, $update_lecturer)) {
+		// 			$_SESSION["alert"] = "Information Updated";
+		// 			header("location: home");
+		// 		} else {
+		// 			$_SEESION["alert"] = "An error occured while updating information";
+		// 			header("location: home");
+		// 		}
+		// 		break;
+		// 	case 'admin':
+		// 		// Nothing here
+		// 		break;
+		// 	default:
+		// 		$_SESSION["alert"] = "Couldn't specify account type";
+		// 		header("location: home");
+		// 		break;
+		// }
 	}
 	exit;
 }
