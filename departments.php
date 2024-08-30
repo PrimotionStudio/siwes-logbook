@@ -14,7 +14,7 @@ if (isset($_GET["faculty_id"])) {
 
     if (mysqli_num_rows($query_faculty) == 0) {
         $_SESSION["alert"] = "Cannot find faculty";
-        header("location: division");
+        header("location: faculty");
         exit;
     }
     $get_faculty = mysqli_fetch_assoc($query_faculty);
@@ -23,7 +23,7 @@ if (isset($_GET["faculty_id"])) {
     $query_department = mysqli_query($con, $select_department);
 } else {
     $_SESSION["alert"] = "Cannot find faculty";
-    header("location: division");
+    header("location: faculty");
     exit;
 }
 
