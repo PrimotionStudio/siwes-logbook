@@ -66,7 +66,7 @@ require_once "func/log-entry.php";
                     ?>
                       <tr>
                         <td><?= date("d/m/Y", strtotime($get_log["datetime"])) ?></td>
-                        <td><?= $get_log["activity"] ?></td>
+                        <td><?= strip_tags($get_log["activity"],) ?></td>
                         <td class="text-right">
                           <a href="edit-log?id=<?= $get_log["id"] ?>" title="more">
                             <i class="nc-icon nc-minimal-right"></i>

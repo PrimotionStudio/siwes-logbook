@@ -6,15 +6,32 @@ require_once "access/lecturer_only.php";
 const PAGE_TITLE = "View Log - Digital Logbook System";
 include_once "included/head.php";
 // Get Student Info
-$select_student = "SELECT * FROM students WHERE user_id='$user_id'";
-$query_student = mysqli_query($con, $select_student);
-if (mysqli_num_rows($query_student) == 0) {
-  $_SESSION["alert"] = "Your information is not complete";
-  // Takes you to *home* so that you can be redirected to the appropriate route
+if (isset($_GET["user_id"])) {
+  $_user_id = $_GET["user_id"];
+  $select_student = "SELECT * FROM students WHERE user_id='$_user_id'";
+  $query_student = mysqli_query($con, $select_student);
+  if (mysqli_num_rows($query_student) == 0) {
+    $_SESSION["alert"] = "Cannot find student";
+    // Takes you to *home* so that you can be redirected to the appropriate route
+    header("location: home");
+    exit;
+  }
+  $get_student = mysqli_fetch_assoc($query_student);
+} else {
+  $_SESSION["alert"] = "Cannot find student";
   header("location: home");
   exit;
 }
-$get_student = mysqli_fetch_assoc($query_student);
+
+$select_student_user = "SELECT * FROM users WHERE id='$_user_id'";
+$query_student_user = mysqli_query($con, $select_student_user);
+if (mysqli_num_rows($query_student_user) == 0) {
+  $_SESSION["alert"] = "Cannot find log author";
+  header("location: student-logs.php?id=" . $get_log["user_id"]);
+  exit;
+}
+$get_student_user = mysqli_fetch_assoc($query_student_user);
+
 $student_id = $get_student["id"];
 $company_id = $get_student["company_id"];
 // Get Company Info
@@ -29,9 +46,9 @@ $get_company = mysqli_fetch_assoc($query_company);
 
 // Makes sure that there is an id passed as a query parameter
 // and the id in the logs table and it belongs to a particular user_id and company_id
-if (isset($_GET["id"])) {
-  $log_id = $_GET["id"];
-  $select_log = "SELECT * FROM logs WHERE id='$log_id' && user_id='$user_id' && company_id='$company_id'";
+if (isset($_GET["log_id"])) {
+  $log_id = $_GET["log_id"];
+  $select_log = "SELECT * FROM logs WHERE id='$log_id' && user_id='$_user_id' && company_id='$company_id'";
   $query_log = mysqli_query($con, $select_log);
   if (mysqli_num_rows($query_log) == 0) {
     $_SESSION["alert"] = "Cannot find logs";
@@ -46,7 +63,6 @@ if (isset($_GET["id"])) {
 }
 $select_feedback = "SELECT * FROM feedbacks WHERE log_id='$log_id' && company_id='$company_id' && student_id='$student_id'";
 $query_feedback = mysqli_query($con, $select_feedback);
-require_once "func/edit-log.php";
 ?>
 
 <div class="wrapper ">
@@ -72,7 +88,7 @@ require_once "func/edit-log.php";
             <?php
           endif;
             ?>
-            <div class="card card-user">
+            <!-- <div class="card card-user">
               <div class="card-header">
                 <h5 class="card-title">Log Activity for <?= $get_company["name"] ?></h5>
               </div>
@@ -100,6 +116,28 @@ require_once "func/edit-log.php";
                     </div>
                   </div>
                 </form>
+              </div>
+            </div> -->
+
+            <div class="card card-user">
+              <div class="card-header">
+                <h5 class="card-title">Logged Activity by <?= $get_student_user["firstname"] . " " . $get_student_user["lastname"] ?> at <?= $get_company["name"] ?></h5>
+                <?php
+                if ($get_log["attachment"] != "") :
+                ?>
+                  <p><span class="badge badge-pill badge-light"><a href="<?= $get_log["attachment"] ?>" download>Download Attachment</a></span></p>
+                <?php
+                endif;
+                ?>
+              </div>
+              <div class="card-body border-bottom border-top">
+
+                <p>
+                  <?= $get_log["activity"] ?>
+                </p>
+              </div>
+              <div class="card-footer pt-3 pb-0">
+                <p><span><?= date("l d, M Y", strtotime($get_log["datetime"])) ?></span></p>
               </div>
             </div>
             </div>

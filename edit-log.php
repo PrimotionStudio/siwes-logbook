@@ -77,7 +77,7 @@ require_once "func/edit-log.php";
                 <h5 class="card-title">Log Activity for <?= $get_company["name"] ?></h5>
               </div>
               <div class="card-body">
-                <form action="" method="post">
+                <form action="" method="post" enctype="multipart/form-data">
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
@@ -89,8 +89,25 @@ require_once "func/edit-log.php";
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
+                        <div class="d-flex justify-content-between">
+                          <label>Attachment: <small>all attachments (single or multiple) must be zipped and less than 100MB</small></label>
+                          <?php
+                          if ($get_log["attachment"] != "") :
+                          ?>
+                            <p><a href="<?= $get_log["attachment"] ?>" download>Download Attachment</a></p>
+                          <?php
+                          endif;
+                          ?>
+                        </div>
+                        <input type="file" name="attachment" style="position: relative; opacity: 100;" class="form-control" accept=".zip">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
                         <label>Description</label>
-                        <textarea class="form-control textarea h100" name="description" placeholder="Write a description of the activity to enable the readers better understand" style="max-height: 200px; height: 200px;" required><?= $get_log["activity"] ?></textarea>
+                        <textarea class="form-control textarea h100" id="content" name="description" placeholder="Write a description of the activity to enable the readers better understand" style="max-height: 200px; height: 200px;" required><?= $get_log["activity"] ?></textarea>
                       </div>
                     </div>
                   </div>
@@ -157,6 +174,10 @@ require_once "func/edit-log.php";
     document.addEventListener("DOMContentLoaded", (e) => {
       document.getElementById("datetime").value = "<?= date("Y-m-d", strtotime($get_log["datetime"])) ?>";
     })
+  </script>
+  <script src="ckeditor/ckeditor.js"></script>
+  <script>
+    CKEDITOR.replace('content');
   </script>
   <?php
   include_once "included/scripts.php";

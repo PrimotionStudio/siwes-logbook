@@ -26,9 +26,9 @@ if (isset($_GET["id"])) {
 // Confirm that the log is from the same company has the supervisor
 
 // $query_supervisor is gotten from the validate.php script
-$get_lecturer = mysqli_fetch_assoc($query_lecturer);
-$supervisor_id = $get_lecturer["id"];
-$company_id = $get_lecturer["company_id"];
+$get_supervisor = mysqli_fetch_assoc($query_supervisor);
+$supervisor_id = $get_supervisor["id"];
+$company_id = $get_supervisor["company_id"];
 
 if ($get_log["company_id"] == $company_id) {
 	// Confirmed
@@ -83,8 +83,16 @@ include_once "included/head.php";
 					<div class="card card-user">
 						<div class="card-header">
 							<h5 class="card-title">Logged Activity by <?= $get_student_user["firstname"] . " " . $get_student_user["lastname"] ?> at <?= $get_company["name"] ?></h5>
+							<?php
+							if ($get_log["attachment"] != "") :
+							?>
+								<p><span class="badge badge-pill badge-light"><a href="<?= $get_log["attachment"] ?>" download>Download Attachment</a></span></p>
+							<?php
+							endif;
+							?>
 						</div>
 						<div class="card-body border-bottom border-top">
+
 							<p>
 								<?= $get_log["activity"] ?>
 							</p>
